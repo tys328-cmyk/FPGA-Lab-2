@@ -1,0 +1,82 @@
+`timescale 1ns / 1ps
+
+module adder_tb;
+
+    reg  [3:0] A;
+    reg  [3:0] B;
+    reg        Cin;
+
+    wire [3:0] Sum_RCA;
+    wire       Cout_RCA;
+
+    wire [3:0] Sum_CLA;
+    wire       Cout_CLA;
+
+
+    ripple_carry_adder_4bit RCA (
+        .A(A),
+        .B(B),
+        .Cin(Cin),
+        .Sum(Sum_RCA),
+        .Cout(Cout_RCA)
+    );
+
+
+    carry_lookahead_adder_4bit CLA (
+        .A(A),
+        .B(B),
+        .Cin(Cin),
+        .Sum(Sum_CLA),
+        .Cout(Cout_CLA)
+    );
+
+
+    initial begin
+
+        A = 4'b0000;
+        B = 4'b0000;
+        Cin = 0;
+
+        #10;
+
+        // 5 + 3 = 8
+        A = 4'b0101;
+        B = 4'b0011;
+        Cin = 0;
+
+        #10;
+
+        // 15 + 1 = 16
+        A = 4'b1111;
+        B = 4'b0001;
+        Cin = 0;
+
+        #10;
+
+        // 7 + 8 = 15
+        A = 4'b0111;
+        B = 4'b1000;
+        Cin = 0;
+
+        #10;
+
+        // 10 + 5 + 1 = 16
+        A = 4'b1010;
+        B = 4'b0101;
+        Cin = 1;
+
+        #10;
+
+        // Carry propagation test
+        A = 4'b1111;
+        B = 4'b0000;
+        Cin = 1;
+
+        #10;
+
+        $finish;
+
+    end
+
+endmodule
+
